@@ -1,0 +1,25 @@
+name: OpenShulkerBoxes
+version: '${minecraft.plugin.version}'
+main: de.themoep.openshulkerboxes.OpenShulkerBoxes
+authors: [Phoenix616]
+description: A simple plugin to open shulker boxes directly from the inventory
+commands:
+  openshulkerboxes:
+    aliases: [osb, openshulker]
+    description: Main OpenShulkerBoxes plugin command.
+    usage: /<command> reload
+    permission: openshulkerboxes.command
+    permission-message: You don't have the permission <permission>
+permissions:
+  openshulkerboxes.command:
+    description: Gives permission to the plugin command
+    default: op
+  openshulkerboxes.command.reload:
+    description: Gives permission to reload the plugin
+    default: op
+  openshulkerboxes.open.in-inventory:
+    description: Gives permission to open boxes in the inventory
+    default: op
+  openshulkerboxes.open.from-hotbar:
+    description: Gives permission to open boxes from the hotbar
+    default: op

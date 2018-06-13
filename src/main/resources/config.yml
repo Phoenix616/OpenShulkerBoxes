@@ -1,0 +1,10 @@
+openable-items:
+- "*_shulker_box"
+open:
+  in-inventory: right
+#  in-creative: right # Creative is broken ;_;
+  from-hotbar:
+    action:
+    - right_click_air
+    - right_click_block
+    sneaking: false
