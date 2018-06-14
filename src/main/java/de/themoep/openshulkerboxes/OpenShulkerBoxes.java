@@ -171,7 +171,10 @@ public final class OpenShulkerBoxes extends JavaPlugin {
                             }
                         }
                     }
-                    GuiStorageElement storage = new GuiStorageElement('c', inventory) {
+                    GuiStorageElement storage = new GuiStorageElement('c', inventory, () -> {
+                        stateMeta.setBlockState(container);
+                        item.setItemMeta(stateMeta);
+                    }) {
                         @Override
                         public Action getAction() {
                             Action action = super.getAction();
@@ -184,10 +187,7 @@ public final class OpenShulkerBoxes extends JavaPlugin {
                                         && isOpenable(click.getEvent().getCurrentItem().getType())) {
                                     return true;
                                 }
-                                boolean c = action.onClick(click);
-                                stateMeta.setBlockState(container);
-                                item.setItemMeta(stateMeta);
-                                return c;
+                                return action.onClick(click);
                             };
                         }
                     };
