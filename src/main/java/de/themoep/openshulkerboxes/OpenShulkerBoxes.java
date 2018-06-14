@@ -171,26 +171,12 @@ public final class OpenShulkerBoxes extends JavaPlugin {
                             }
                         }
                     }
-                    GuiStorageElement storage = new GuiStorageElement('c', inventory, () -> {
+                    GuiStorageElement storage = new GuiStorageElement('c', inventory);
+                    storage.setItemValidator(slotInfo -> slotInfo.getItem() == null || !isOpenable(slotInfo.getItem().getType()));
+                    storage.setApplyStorage(() -> {
                         stateMeta.setBlockState(container);
                         item.setItemMeta(stateMeta);
-                    }) {
-                        @Override
-                        public Action getAction() {
-                            Action action = super.getAction();
-                            return click -> {
-                                if (click.getEvent().getCursor() != null
-                                        && isOpenable(click.getEvent().getCursor().getType())) {
-                                    return true;
-                                }
-                                if (click.getEvent().getCurrentItem() != null
-                                        && isOpenable(click.getEvent().getCurrentItem().getType())) {
-                                    return true;
-                                }
-                                return action.onClick(click);
-                            };
-                        }
-                    };
+                    });
                     String title = itemMeta.getDisplayName();
                     if (title == null && container instanceof Nameable) {
                         title = ((Nameable) container).getCustomName();
