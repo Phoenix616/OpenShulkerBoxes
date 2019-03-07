@@ -42,9 +42,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public final class OpenShulkerBoxes extends JavaPlugin {
@@ -56,7 +59,8 @@ public final class OpenShulkerBoxes extends JavaPlugin {
     //private Set<ClickType> openInCreativeTypes; // Creative is broken ;_;
     private Set<Action> openFromHotbarActions;
     private boolean openFromHotbarRequiresSneaking = true;
-    
+    private Map<UUID, Integer> opened = new HashMap<>();
+
     @Override
     public void onEnable() {
         loadConfig();
@@ -148,7 +152,7 @@ public final class OpenShulkerBoxes extends JavaPlugin {
         return false;
     }
     
-    public boolean showItemGui(HumanEntity viewer, ItemStack item) {
+    public boolean showItemGui(HumanEntity viewer, ItemStack item, int slot) {
         if (item != null && isOpenable(item.getType())) {
             ItemMeta itemMeta = item.getItemMeta();
             
@@ -187,7 +191,11 @@ public final class OpenShulkerBoxes extends JavaPlugin {
                     }
                     
                     InventoryGui gui = new InventoryGui(this, container, title, rows.toArray(new String[0]), storage);
-                    gui.setCloseAction(close -> false);
+                    gui.setCloseAction(close -> {
+                        removeOpen(viewer, slot);
+                        return false;
+                    });
+                    addOpen(viewer, slot);
                     gui.show(viewer);
                     return true;
                 }
@@ -195,7 +203,23 @@ public final class OpenShulkerBoxes extends JavaPlugin {
         }
         return false;
     }
-    
+
+    private void addOpen(HumanEntity player, int slot) {
+        opened.put(player.getUniqueId(), slot);
+    }
+
+    private void removeOpen(HumanEntity player, int slot) {
+        opened.remove(player.getUniqueId(), slot);
+    }
+
+    void removeOpen(HumanEntity player) {
+        opened.remove(player.getUniqueId());
+    }
+
+    public boolean hasOpen(HumanEntity viewer, int slot) {
+        return opened.getOrDefault(viewer.getUniqueId(), -1) == slot;
+    }
+
     public Set<ClickType> getOpenInInventoryTypes() {
         return openInInventoryTypes;
     }

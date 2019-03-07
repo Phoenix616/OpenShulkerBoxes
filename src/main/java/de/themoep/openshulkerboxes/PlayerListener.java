@@ -21,7 +21,9 @@ package de.themoep.openshulkerboxes;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class PlayerListener implements Listener {
@@ -30,14 +32,32 @@ public class PlayerListener implements Listener {
     public PlayerListener(OpenShulkerBoxes plugin) {
         this.plugin = plugin;
     }
+
+    @EventHandler
+    public void on(PlayerQuitEvent event) {
+        plugin.removeOpen(event.getPlayer());
+    }
    
     @EventHandler
     public void on(InventoryClickEvent event) {
         if (plugin.getOpenInInventoryTypes().contains(event.getClick())
                 && event.getClickedInventory() == event.getWhoClicked().getInventory() // only allow opening in inventory and not other containers
                 && event.getWhoClicked().hasPermission("openshulkerboxes.open.in-inventory")
-                && plugin.showItemGui(event.getWhoClicked(), event.getCurrentItem())) {
+                && plugin.showItemGui(event.getWhoClicked(), event.getCurrentItem(), event.getRawSlot())) {
             event.setCancelled(true);
+        }
+        if (plugin.hasOpen(event.getWhoClicked(), event.getRawSlot())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void on(InventoryDragEvent event) {
+        for (Integer slot : event.getRawSlots()) {
+            if (plugin.hasOpen(event.getWhoClicked(), slot)) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
     
@@ -58,7 +78,7 @@ public class PlayerListener implements Listener {
                 && plugin.getOpenFromHotbarActions().contains(event.getAction())
                 && plugin.isOpenFromHotbarRequiringSneaking() == event.getPlayer().isSneaking()
                 && event.getPlayer().hasPermission("openshulkerboxes.open.from-hotbar")
-                && plugin.showItemGui(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand())) {
+                && plugin.showItemGui(event.getPlayer(), event.getPlayer().getInventory().getItemInMainHand(), event.getPlayer().getInventory().getHeldItemSlot())) {
             event.setCancelled(true);
         }
     }
