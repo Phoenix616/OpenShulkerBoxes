@@ -11,9 +11,9 @@ Aliases: `/openshulkerboxes`, `/openshulker`, `/osb`
 Usage: `/osb reload` - Reload the config
 
 ## Permissions:
-Name                                | What it does
+Name                                 | What it does
 -------------------------------------|-------------------------------------------------
-`openshulkerboxes.command`           |Gives permission to the plugin command
+`openshulkerboxes.command`           | Gives permission to the plugin command
 `openshulkerboxes.command.reload`    | Gives permission to reload the plugin
 `openshulkerboxes.open.in-inventory` | Gives permission to open boxes in the inventory
 `openshulkerboxes.open.from-hotbar`  | Gives permission to open boxes from the hotbar
