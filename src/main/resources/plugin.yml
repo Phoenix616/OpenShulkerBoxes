@@ -3,6 +3,7 @@ version: '${minecraft.plugin.version}'
 main: de.themoep.openshulkerboxes.OpenShulkerBoxes
 authors: [Phoenix616]
 description: A simple plugin to open shulker boxes directly from the inventory
+api-version: 1.13
 commands:
   openshulkerboxes:
     aliases: [osb, openshulker]
