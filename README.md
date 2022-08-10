@@ -23,6 +23,7 @@ All permissions default to `op`
 ## Config
 ```yaml
 openable-items:
+- "shulker_box"
 - "*_shulker_box"
 open:
   in-inventory: right

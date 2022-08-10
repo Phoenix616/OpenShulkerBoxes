@@ -1,4 +1,5 @@
 openable-items:
+- "shulker_box"
 - "*_shulker_box"
 open:
   in-inventory: right
